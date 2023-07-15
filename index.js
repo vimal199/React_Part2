@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 app.use(express.json())
+app.use(express.static('build'))
 const requestLogger = (request, response, next) => {
     console.log('Method:', request.method)
     console.log('Path:  ', request.path)
@@ -30,6 +31,7 @@ let notes = [
 ]
 const generateId = () => {
     const maxId = notes.length > 0 ? Math.max(...notes.map(n => n.id)) : 0
+    console.log('id is', maxId);
     return maxId + 1
 }
 app.get(
@@ -76,9 +78,11 @@ app.post('/api/notes', (request, response) => {
         id: generateId(),
 
     }
-    notes.concat(note)
-    console.log(note)
-    console.log(request.headers);
+    console.log("before add", notes);
+    notes.push(note)
+    console.log("After add", notes);
+    //console.log(note)
+    //console.log(request.headers);
     response.json(note)
 }
 

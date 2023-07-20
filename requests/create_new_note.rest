@@ -1,4 +1,4 @@
-POST http://localhost:3002/api/notes
+POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
@@ -6,10 +6,20 @@ Content-Type: application/json
     "important": true
 }
 ###
-POST http://localhost:3002/api/notes
+POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content": "postman is really good in testing backend",
-    "important": true
+    "content": "Ensure that everything still works",
+    "important": false
 }
+###
+PUT http://localhost:3001/api/notes/64b7e0637145a636b5066ebb
+Content-Type: application/json
+
+{
+    "content": "Ensure that everything still worksssssss",
+    "important": false
+}
+###
+DELETE  http://localhost:3001/api/notes/64b7e0637145a636b5066ebb

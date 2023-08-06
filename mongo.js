@@ -3,7 +3,7 @@ if (process.argv.length < 3) {
     console.log('Give password as argument')
     process.exit(1)
 }
-const password = process.argv[2]
+//const password = process.argv[2]
 const url = `mongodb+srv://fullstack:fullstack@cluster0.fzmisa1.mongodb.net/noteApp?retryWrites=true&w=majority`
 mongoose.set('strictQuery', false)
 mongoose.connect(url)
@@ -22,7 +22,7 @@ const note = new Note(
 )
 note.save().then(
     result => {
-        console.log('Note saved!')
+        console.log('Note saved!.result is ', result)
         mongoose.connection.close()
     }
 )

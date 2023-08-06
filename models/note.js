@@ -6,6 +6,7 @@ mongoose.connect(url)
     .then(
         result => {
             console.log('Connected to ', url);
+            console.log('Result is', result);
         }
     )
     .catch(

@@ -30,7 +30,7 @@ const requestLogger = (request, response, next) => {
 }
 app.use(requestLogger)
 const cors = require('cors')
-const { off } = require('./models/note')
+//const { off } = require('./models/note')
 app.use(cors())
 /*let notes = [
     {
@@ -96,7 +96,8 @@ app.delete('/api/notes/:id', (request, response, next) => {
     response.status(204).end()*/
     Note.findByIdAndRemove(request.params.id)
         .then(result => {
-            response.status(204).end()
+            console.log('result', result)
+            return response.status(204).end()
         }
         )
         .catch(error => next(error))
@@ -122,7 +123,8 @@ app.post('/api/notes', (request, response, next) => {
     //console.log(note)
     //console.log(request.headers);
     note.save().then(savedNode => {
-        response.json(note)
+        console.log(savedNode);
+        return response.json(note)
     }
     ).catch(error => next(error))
 }

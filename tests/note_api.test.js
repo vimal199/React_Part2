@@ -4,6 +4,8 @@ const app = require('../app')
 const helper = require('./test_helper')
 const api = supertest(app)
 const Note = require('../models/note')
+const bcrypt = require('bcrypt')
+const User = require('../models/user')
 /*const initialNotes = [
     {
         content: 'HTML is easy',
@@ -141,9 +143,53 @@ describe('deletion of a note', () => {
 
     )
 })
+describe('when there is initially one user in db', () => {
+    beforeEach(
+        async () => {
+            await User.deleteMany({})
+            const passwordHash = await bcrypt.hash('sekret', 10)
+            const user = new User({ userName: 'root', passwordHash })
+            const firstUser = await user.save()
+            console.log('User saved ', firstUser);
+        }
+    )
+    test('creation succeeds with a fresh username', async () => {
+        const usersAtStart = await helper.usersInDb()
+        const newUser = {
+            userName: 'mluukkai',
+            name: 'Matti Luukkainen',
+            password: 'salainen',
+        }
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+        const usersAtEnd = await helper.usersInDb()
+        expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+        const usernames = usersAtEnd.map(user => user.userName)
+        expect(usernames).toContain(newUser.userName)
+    })
+    test('creation fails with proper statuscode and message if username already taken', async () => {
+        const usersAtStart = await helper.usersInDb()
+        const newUser = {
+            userName: 'root',
+            name: 'Superuser',
+            password: 'salainen',
+        }
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+        expect(result.body.error).toContain('expected `userName` to be unique')
+        const usersAtEnd = await helper.usersInDb()
+        expect(usersAtEnd).toEqual(usersAtStart)
+    })
+})
 
 
 afterAll(async () => {
     await mongoose.connection.close()
 })
-//npm test -- tests/note_api.test.js -t "note without content is not added"
+//npm test -- tests/note_api.test.js -t "creation succeeds with a fresh username"

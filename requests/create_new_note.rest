@@ -10,8 +10,9 @@ POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content": "LOL",
-    "important": false
+    "content": "User id of the note creator is at the start one more",
+    "important": true,
+    "userId": "64ddfce86ddb533d9353f75a"
 }
 ###
 PUT http://localhost:3001/api/notes/64b7e0637145a636b5066ebb
@@ -23,3 +24,14 @@ Content-Type: application/json
 }
 ###
 DELETE  http://localhost:3001/api/notes/64b7e0637145a636b5066ebb
+###
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+
+ {
+    "userName": "mluukkai",
+    "name": "matti",
+    "password": "sala234inen"
+}
+
